@@ -16,6 +16,7 @@ model User {
   messages               Message[]     @relation("UserMessages")
   startedConversations   Conversation[] @relation("Starter")
   partneredConversations Conversation[] @relation("Partner")
+  participants           Participant[]
 }
 
 model Message {
@@ -28,6 +29,7 @@ model Message {
 
   sender         User          @relation("UserMessages", fields: [senderId], references: [id])
   conversation   Conversation   @relation(fields: [conversationId], references: [id])
+  attachments    Attachment[]
 }
 
 model Conversation {
@@ -39,6 +41,7 @@ model Conversation {
   starter       User          @relation("Starter", fields: [starterId], references: [id])
   partner       User          @relation("Partner", fields: [partnerId], references: [id])
   messages      Message[]
+  participants  Participant[]
 }
 
 model Participant {
