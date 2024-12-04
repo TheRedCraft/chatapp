@@ -12,6 +12,7 @@ model User {
   username               String        @unique
   email                  String        @unique
   password               String
+  twoFactorSecret        String?       // Optionales Feld für 2FA
   createdAt              DateTime      @default(now())
   messages               Message[]     @relation("UserMessages")
   startedConversations   Conversation[] @relation("Starter")
@@ -25,7 +26,7 @@ model Message {
   senderId       Int
   content        String
   timestamp      DateTime      @default(now())
-  status         String
+  status         MessageStatus
 
   sender         User          @relation("UserMessages", fields: [senderId], references: [id])
   conversation   Conversation   @relation(fields: [conversationId], references: [id])
@@ -56,6 +57,15 @@ model Participant {
 model Attachment {
   id        Int    @id @default(autoincrement())
   messageId Int
+  filePath  String
+  fileType  String?
+  fileSize  Int?
 
   message   Message @relation(fields: [messageId], references: [id])
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
 }
